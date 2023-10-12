@@ -1,0 +1,9 @@
+<form method="POST" enctype="multipart/form-data">
+  <!-- multipart/form-dataلحفظ المنتج -->
+  {% csrf_token %}
+  <p>are you sure</p>
+  <button type="submit">delete</button>
+  <a href="{% url 'index' %}" type="button">تراجع</a>
+
+  
+  </form>

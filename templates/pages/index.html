@@ -1,0 +1,991 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% load static %} 
+
+       
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <!-- Basic -->
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <!-- Mobile Metas -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <!-- Site Metas -->
+  <meta name="keywords" content="" />
+  <meta name="description" content="" />
+  <meta name="author" content="" />
+
+  <title>Timups</title>
+
+
+  <!-- bootstrap core css -->
+  <!-- <link rel="stylesheet" type="text/css" href="css/bootstrap.css" /> -->
+  <!--owl slider stylesheet -->
+  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- font awesome style -->
+
+  <!-- Custom styles for this template -->
+  <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+  <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+
+  <!-- responsive style -->
+  <!-- <link href="css/responsive.css" rel="stylesheet" /> -->
+
+  <script>
+  var user = '{{request.user}}'
+
+  function getToken(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = cookies[i].trim();
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+  }
+  var csrftoken = getToken('csrftoken')
+  function getCookie(name) {
+		    // Split cookie string and get all individual name=value pairs in an array
+		    var cookieArr = document.cookie.split(";");
+
+		    // Loop through the array elements
+		    for(var i = 0; i < cookieArr.length; i++) {
+		        var cookiePair = cookieArr[i].split("=");
+
+		        /* Removing whitespace at the beginning of the cookie name
+		        and compare it with the given string */
+		        if(name == cookiePair[0].trim()) {
+		            // Decode the cookie value and return
+		            return decodeURIComponent(cookiePair[1]);
+		        }
+		    }
+
+		    // Return null if not found
+		    return null;
+		}
+		var cart = JSON.parse(getCookie('cart'))
+
+		if (cart == undefined){
+			cart = {}
+			console.log('Cart Created!', cart)
+			document.cookie ='cart=' + JSON.stringify(cart) + ";domain=;path=/"
+		}
+		console.log('Cart:', cart)
+  </script>
+  
+</head>
+
+<body style="padding-top: 70px ;">
+
+  <!-- <div class="hero_area"> -->
+    <!-- <div class="hero_social">
+      <a href="">
+        <i class="fa fa-facebook" aria-hidden="true"></i>
+      </a>
+      <a href="">
+        <i class="fa fa-twitter" aria-hidden="true"></i>
+      </a>
+      <a href="">
+        <i class="fa fa-linkedin" aria-hidden="true"></i>
+      </a>
+      <a href="">
+        <i class="fa fa-instagram" aria-hidden="true"></i>
+      </a>
+    </div> -->
+    
+    <!-- slider section -->
+    {% if user.is_authenticated and user.is_staff and user.is_superuser %}
+    <div class="row">
+    <div style="display: inline;width: 50%;">
+    <div class="shop_section ">
+      <div class="col-md-6">
+      <div class="box" style="height: 130px;width:200px ;background-color: rgb(247, 200, 119);">
+          <h2 style="margin-left: 30px;margin-top: 30px;">
+            {{customerr}}
+          </h2>
+            <div class="detail-box">
+              <h3>user count</h3>
+            </div>
+       </div>
+       </div>
+      </div>
+    </div>
+   
+  
+    <div style="display: inline;width: 50%;">
+
+    <div class="shop_section ">
+      <div class="col-md-6 ">
+        <div class="box" style="height: 130px;width:200px ;background-color: rgb(247, 200, 119);">
+          <h2 style="margin-left: 30px;margin-top: 30px;">
+            {{review}}
+          </h2>
+            <div class="detail-box">
+              <h3>Comments</h3>
+            </div>
+          </div>
+      </div>
+      </div>
+    </div>
+    
+    </div>
+    <div class="row">
+      <div style="display: inline;width: 50%;">
+      <h2 style="margin-left: 20px;margin-top: 20px;">
+        Customers </h2>
+      <section class="shop_section " style="height: 300px;">
+        {% for s in customer %}
+        <div class="col-sm-6 col-xl-3">
+          <div class="box">
+              <div class="detail-box">
+                <h6>
+                  {{s.customer}}
+                </h6>
+              </div>
+          </div>
+        </div>
+        {% endfor %}
+      </section>
+      </div>
+      <div style="display: inline;width: 50%;">
+      <h2 style="margin-left: 20px;margin-top: 20px;">shipping</h2>
+      <section class="shop_section " style="height: 300px ;">
+        {% for s in shipping %}
+        <div class="col-sm-6 col-xl-3">
+          <div class="box">
+              <div class="detail-box">
+                <h6>
+                  {{s.customer}}
+                </h6>
+                <h6>
+                  {{s.address}}
+                </h6>
+                <h6>
+                {{city}}
+                </h6>
+                <h6>
+                  {{s.state}}
+                </h6>
+              </div>
+          </div>
+
+        </div>
+        {% endfor %}
+
+      </section>
+    </div>
+  </div>
+
+
+    <form method="POST" enctype="multipart/form-data">
+      <!-- multipart/form-dataلحفظ المنتج -->
+      {% csrf_token %}
+      {{forms}}
+      <button type="submit">add</button>
+      </form>
+      
+      <section class="shop_section layout_padding">
+        <div class="container">
+          <div class="heading_container heading_center">
+            <h2>
+               mobiles
+            </h2>
+          </div>
+          <div class="row">
+            <div class="col-md-6 ">
+              <div class="box">
+                <a href="">
+                  <div class="img-box">
+                    <img src="{% static 'image/w1.png' %}" alt="">
+                  </div>
+                  <div class="detail-box">
+                    <h6>
+                      Smartwatch
+                    </h6>
+                    <h6>
+                      Price:
+                      <span>
+                        $300
+                      </span>
+                    </h6>
+                  </div>
+                  <div class="new">
+                    <span>
+                      Featured
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+    
+            {% for z in prod %}
+            <div class="col-sm-6 col-xl-3">
+              <div class="box">
+                <a  >
+                  <div class="img-box">
+                    <a href="{% url 'product' z.id %}">
+                      <img src="{{z.image.url}}" class="update-cart" alt="">
+    
+                    </a>
+                  </div>
+                  <div class="detail-box">
+                    <h6>
+                      {{z.name}}
+                    </h6>
+                    <h6>
+                      Price:
+                      <span style="text-decoration: line-through;color:red">
+                        {{z.price}}
+                      </span>
+                      <span>
+                        {{z.price2}}
+                      </span>
+                      <a id="edit" href="{% url 'update' z.id %}">edit</a>
+                      <a id="delete" href="{% url 'delete' z.id %}">delete</a>
+
+                    </h6>
+                  </div>
+                  <div class="new">
+                    <span>
+                      New
+                    </span>
+    
+                  </div>
+                  <button data-product={{z.id}} data-action="add" style="font-size: 14px;margin:auto;" class="btn btn-warning update-cart " >ADD TO CART</button>
+    
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+    
+    
+    
+            
+          </div>
+          <div class="btn-box">
+            <a href="{% url 'products' %}">
+              View All
+            </a>
+          </div>
+        </div>
+      </section>
+
+    <hr>
+    
+      <section class="shop_section layout_padding">
+        <div class="container">
+          <div class="heading_container heading_center">
+            <h2>
+              Latest laptops
+            </h2>
+          </div>
+          <div class="row">
+            <div class="col-md-6 ">
+              <div class="box">
+                <a href="">
+                  <div class="img-box">
+                    <img src="{% static 'image/w1.png' %}" alt="">
+                  </div>
+                  <div class="detail-box">
+                    <h6>
+                      Smartwatch
+                    </h6>
+                    <h6>
+                      Price:
+                      <span>
+                        $300
+                      </span>
+                    </h6>
+                  </div>
+                  <div class="new">
+                    <span>
+                      Featured
+                    </span>
+                  </div>
+                </a>
+              </div>
+            </div>
+            
+    
+            {% for z in laptops %}
+            <div class="col-sm-6 col-xl-3">
+              <div class="box">
+                <a  >
+                  <div class="img-box">
+                    <a href="{% url 'product' z.id %}">
+                      <img src="{{z.image.url}}" class="update-cart" alt="">
+    
+                    </a>
+                  </div>
+                  <div class="detail-box">
+                    <h6>
+                      {{z.name}}
+                    </h6>
+                    <h6>
+                      Price:
+                      <span style="text-decoration: line-through;color:red">
+                        {{z.price}}$
+                      </span>
+                      <span >
+                        
+                        {{z.price2}}$
+                      </span>
+                      <a id="edit" href="{% url 'update' z.id %}">edit</a>
+                      <a id="delete" href="{% url 'delete' z.id %}">delete</a>
+                    </h6>
+                  </div>
+                  <div class="new">
+                    <span>
+                      New
+                    </span>
+    
+                  </div>
+                  <button data-product={{z.id}} data-action="add" style="font-size: 14px;margin:auto;" class="btn btn-warning update-cart " >ADD TO CART</button>
+    
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+    
+    
+    
+            
+          </div>
+          <div class="btn-box">
+            <a href="{% url 'laptops' %}">
+              View All
+            </a>
+          </div>
+        </div>
+      </section>
+    
+    {% else %}
+    
+    <div class="slider_section" >
+      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner"style='margin-top: 17px;' >
+          <div class="carousel-item active">
+            <div class="container-fluid ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1 style="font-size:55px ;">
+                      Wellcome
+                    </h1>
+                    <p>
+                      Aenean scelerisque felis ut orci condimentum laoreet. Integer nisi nisl, convallis et augue sit amet, lobortis semper quam.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1" style="height:45px;width:140px;padding-bottom: 40px;margin-left: 20px;">
+                        Contact Us
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img id="slide" src="{% static 'image/jkjj.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container-fluid ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Smart Watches
+                    </h1>
+                    <p>
+                      Aenean scelerisque felis ut orci condimentum laoreet. Integer nisi nisl, convallis et augue sit amet, lobortis semper quam.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Contact Us
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <img src="{% static 'image/fh.png' %}" alt="">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="carousel-item ">
+            <div class="container-fluid ">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="detail-box">
+                    <h1>
+                      Smart Watches
+                    </h1>
+                    <p>
+                      Aenean scelerisque felis ut orci condimentum laoreet. Integer nisi nisl, convallis et augue sit amet, lobortis semper quam.
+                    </p>
+                    <div class="btn-box">
+                      <a href="" class="btn1">
+                        Contact Us
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="img-box">
+                    <!-- <img src="images/slider-img.png" alt=""> -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!-- <ol class="carousel-indicators" style="margin-top: 0;">
+          <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
+          <li data-target="#customCarousel1" data-slide-to="1"></li>
+          <li data-target="#customCarousel1" data-slide-to="2"></li>
+        </ol> -->
+      </div>
+
+    </div>
+    <!-- end slider section -->
+  </div>
+
+  <!-- shop section -->
+  <header>
+   
+    <p>
+      <span class="span">&#139;</span>
+      <span class="span">&#155;</span>
+    </p>
+  </header>
+  
+        <section style="flex-wrap: nowrap;display: inline-flex; margin-left:50px ;">
+
+        {% for x in related %}
+          <div class="product" style="width: 170px;height:360px">
+            <picture>
+              <a href="{% url 'product' x.id %}">
+              <img class="imgg" src="{{x.image.url}}" alt="" >
+            </a>
+            </picture>
+            <div class="detail">
+              <p>
+                <b>{{x.name}}</b><br>
+                
+              </p>
+              <span class="price" style="text-decoration: line-through;color: red;">{{x.price}}$</span>
+              <span class="pred">{{x.price2}}$</span>
+
+            </div>
+            <div class="update-cart"  data-product={{x.id}} data-action="add">
+             
+              <a href="#" class="btn btn-warning" style="text-decoration: none;width: 100%;
+              margin-bottom:20px;
+              display: flex;
+              height: 40px;
+              font-size: 17x;
+              color: #444;
+              border: none;
+              justify-content: center;  
+              background-color: rgba(202, 252, 248, 0.5);">Add-cart</a>
+            </div>
+          </div>
+       
+        {% endfor %}
+      </section>
+  
+ 
+
+  <div class="shop_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+           mobiles
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6 ">
+          <div class="box">
+            <a href="">
+              <div class="img-box">
+                <img src="{% static 'image/fhh.png' %}" alt="">
+              </div>
+              <div class="detail-box">
+                <h6>
+                  sumsung
+                </h6>
+                <h6>
+                  Price:
+                  <span>
+                    $300
+                  </span>
+                </h6>
+              </div>
+              <div class="new">
+                <span>
+                  Featured
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+
+        {% for z in prod %}
+        <div class="col-sm-6 col-xl-3">
+          <div class="box">
+            <a  >
+              <div class="img-box">
+                <a href="{% url 'product' z.id %}">
+                  <img src="{{z.image.url}}" class="update-cart" alt="">
+
+                </a>
+              </div>
+              <div class="detail-box">
+                <h6>
+                  {{z.name}}
+                </h6>
+                <h6>
+                  Price:
+                  <span class="price" style="text-decoration: line-through;color:red">
+                  
+                    {{z.price}}$
+                  </span>
+                  <span class="pred">
+                    
+                    {{z.price2}}$
+                  </span>
+                  
+                </h6>
+              </div>
+              <div class="new">
+                <span>
+                  New
+                </span>
+
+              </div>
+              <button data-product={{z.id}} data-action="add" style="font-size: 14px;margin:auto;" class="btn btn-warning update-cart " >ADD TO CART</button>
+
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+
+
+
+        
+      </div>
+      <div class="btn-box">
+        <a href="{% url 'products' %}">
+          View All
+        </a>
+      </div>
+    </div>
+  </div>
+<hr>
+
+  <!-- <div class="shop_section layout_padding">
+    <div class="container">
+      <div class="heading_container heading_center">
+        <h2>
+           laptops
+        </h2>
+      </div>
+      <div class="row">
+        <div class="col-md-6 ">
+          <div class="box">
+            <a href="">
+              <div class="img-box">
+                <img src="{% static 'image/w1.png' %}" alt="">
+              </div>
+              <div class="detail-box">
+                <h6>
+                  Smartwatch
+                </h6>
+                <h6>
+                  Price:
+                  <span>
+                    $300
+                  </span>
+                  
+                </h6>
+              </div>
+              <div class="new">
+                <span>
+                  Featured
+                </span>
+              </div>
+            </a>
+          </div>
+        </div>
+        
+
+        {% for z in laptops %}
+        <div class="col-sm-6 col-xl-3">
+          <div class="box">
+            <a  >
+              <div class="img-box">
+                <a href="{% url 'product' z.id %}">
+                  <img src="{{z.image.url}}" class="update-cart" alt="">
+
+                </a>
+              </div>
+              <div class="detail-box">
+                <h6>
+                  {{z.name}}
+                </h6>
+                <h6>
+                  Price:
+                  <span class="price" style="text-decoration: line-through; color: red;">
+                    {{z.price}}$
+                  </span>
+                  <span class="pred">
+                    {{z.price2}}$
+                  </span>
+                  
+                </h6>
+              </div>
+              <div class="new">
+                <span>
+                  New
+                </span>
+
+              </div>
+              <button data-product={{z.id}} data-action="add" style="font-size: 14px;margin:auto;" class="btn btn-warning update-cart " >ADD TO CART</button>
+
+            </a>
+          </div>
+        </div>
+        {% endfor %}
+
+
+
+        
+      </div>
+      <div class="btn-box">
+        <a href="{% url 'laptops' %}">
+          View All
+        </a>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- end shop section -->
+
+  <!-- about section -->
+
+  <section class="about_section layout_padding">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6 col-lg-5 ">
+          <div class="img-box">
+            <img  src="{% static 'image/fhh.png' %}" alt="">
+          </div>
+        </div>
+        <div class="col-md-6 col-lg-7">
+          <div class="detail-box">
+            <div class="heading_container">
+              <h2 class="aboutHeader">
+                About Us
+              </h2>
+            </div>
+            <p>
+              There are many variations of passages of Lorem Ipsum available, but the majority have suffered alteration
+              in some form, by injected humour, or randomised words which don't look even slightly believable. If you
+              are going to use a passage of Lorem Ipsum.
+            </p>
+            <a href={% url 'about' %}>
+              Read More
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- end about section -->
+
+  <!-- feature section
+
+  <div class="feature_section layout_padding">
+    <div class="container">
+      <div class="heading_container">
+        <h2>
+          Features Of Our Watches
+        </h2>
+        <p>
+          Consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+        </p>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'image/f1.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Fitness Tracking
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              </p>
+              <a href="">
+                <span>
+                  Read More
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'image/f2.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Alerts & Notifications
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              </p>
+              <a href="">
+                <span>
+                  Read More
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'image/f3.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Messages
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              </p>
+              <a href="">
+                <span>
+                  Read More
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-6 col-lg-3">
+          <div class="box">
+            <div class="img-box">
+              <img src="{% static 'image/f4.png' %}" alt="">
+            </div>
+            <div class="detail-box">
+              <h5>
+                Bluetooth
+              </h5>
+              <p>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit,
+              </p>
+              <a href="">
+                <span>
+                  Read More
+                </span>
+                <i class="fa fa-long-arrow-right" aria-hidden="true"></i>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="btn-box">
+        <a href="">
+          View More
+        </a>
+      </div>
+    </div>
+  </div> -->
+
+  <!-- end feature section -->
+
+  <!-- contact section -->
+
+  <!-- <section class="contact_section">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-6">
+          <div class="form_container">
+            <div class="heading_container">
+              <h2>
+                Contact Us
+              </h2>
+            </div>
+            <form action="">
+              <div>
+                <input type="text" placeholder="Full Name " />
+              </div>
+              <div>
+                <input type="email" placeholder="Email" />
+              </div>
+              <div>
+                <input type="text" placeholder="Phone number" />
+              </div>
+              <div>
+                <input type="text" class="message-box" placeholder="Message" />
+              </div>
+              <div class="d-flex ">
+                <button>
+                  SEND
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="img-box">
+            <img src={% static 'image/contact-img.jpg' %} alt="">
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> -->
+
+  <!-- end contact section -->
+
+  <!-- client section -->
+ 
+  <div class="heading_container heading_center">
+    <h2 style="margin-top: 60px;">
+
+      Testimonial
+    </h2>
+    <img src="{% static  'image/down.png' %}" style="width: 20px;margin-top: 20px;">
+  </div>
+  <section class="client_section layout_padding">
+    <div class="container">
+      
+      {% for i in reviews %}
+
+      <div class="carousel-wrap " >
+          <div class="item">
+
+            <div class="box" >
+              <div class="img-box">
+                <img src={% static 'image/dd.jpg' %} alt="">
+              </div>
+              <div class="detail-box">
+                <div class="client_info">
+
+                  <div class="client_name">
+                    <h5>
+                      {{i.customer}}
+                    </h5>
+                    <h6>
+                      Customer
+                    </h6>
+                  </div>
+                  <i class="fa fa-quote-left" aria-hidden="true"></i>
+                </div>
+                <h6>
+                  {{i.product}}
+                </h6>
+                <p>
+                  {{i.text}}
+                </p>
+              </div>
+
+            </div>
+
+          </div>
+          
+      </div>
+      {% endfor %}
+
+    </div>
+  </section>
+    {% endif %}
+    
+  <!-- end client section -->
+
+
+  <!-- jQery -->
+  <!-- <script src="js/jquery-3.4.1.min.js"></script> -->
+  <!-- popper js -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
+     </script>  -->
+  <!-- bootstrap js -->
+  <!-- <script src="js/bootstrap.js"></script> -->
+  <!-- owl slider -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
+   </script>  -->
+  <!-- custom js -->
+  <!-- Google Map -->
+  <!-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap"></script> -->
+  <!-- End Google Map -->
+  <script src="{% static 'js/cart.js' %}"></script>
+  <script>
+  let span = document.getElementsByClassName('span');
+	let product = document.getElementsByClassName('product')
+	let product_page = Math.ceil(product.length/4);
+	let l = 0;
+	let movePer = 25.34;
+	let maxMove = 203;
+	// mobile_view	
+	let mob_view = window.matchMedia("(max-width: max-content)");
+	if (mob_view.matches)
+	 {
+	 	movePer = 50.36;
+	 	maxMove = 504;
+	 }
+
+	let right_mover = ()=>{
+		l = l + movePer;
+		if (product == 1){l = 0; }
+		for(const i of product)
+		{
+			if (l > maxMove){l = l - movePer;}
+			i.style.left = '-' + l + '%';
+		}
+
+	}
+	let left_mover = ()=>{
+		l = l - movePer;
+		if (l<=0){l = 0;}
+		for(const i of product){
+			if (product_page>1){
+				i.style.left = '-' + l + '%';
+			}
+		}
+	}
+  for(i=0;i<span.length;i++){
+    span[1].onclick = ()=>{right_mover();}
+	  span[0].onclick = ()=>{left_mover();}
+  }
+	
+  </script>
+</body>
+
+</html>
+
+{% endblock content %}

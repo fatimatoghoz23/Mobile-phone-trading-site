@@ -1,0 +1,33 @@
+
+{% extends 'base.html' %}
+{% load static %}
+{% block content  %}
+<div class="container">
+  <div class="row justify-content-center">
+      <div class="col-md-8">
+        <a href="{% url 'products' %}" class="btn btn-primary mt-2">Back</a>
+          <div class="card m-5 p-2" style="width: 25rem;">
+              <img src="{{ products.image.url }}" style="height: 280px;" class="card-img-top" alt="...">
+              
+
+      </div>
+      
+
+      </div>
+      <div class="card-body">
+        <h5 class="card-title m-1"><b>Name:</b> {{ products.name }}</h5>
+        <h4 class="card-subtitle m-1"><b>Price:</b> ${{ products.price }}</h4>
+        <p style="font-size: 14px;" class="btn btn-primary m-1 p-1">{{ products.category }}</p>
+        <hr>
+    <p style="font-size: 20px;" class="card-subtitle m-1">Description:<span style="color:chocolate ;">{{ products.content}}</span><br>
+    Ram:{{products.ram}}GB</p>
+         <!-- <p style="font-size: 13px;" class="cart-text mt-1">added - {{ eachProduct.created_at }}</p>  -->
+         <p style="font-size: 14px;margin-top: 90px;" class="btn btn-warning " >ADD TO CART</p>
+
+    </div>
+
+              
+  </div>
+    </div>
+
+{% endblock content %}

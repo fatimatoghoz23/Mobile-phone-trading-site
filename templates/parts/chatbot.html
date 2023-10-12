@@ -1,0 +1,83 @@
+{% load static %} 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Chatbot</title>
+
+    <!-- css file link -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet" />
+    <link href="{% static 'css/main.css' %}" rel="stylesheet" />
+
+    <!-- font awesome icon cdn-->
+  
+    <script src="{% static 'js/main.js' %}"></script>
+
+</head>
+<body>
+    
+        
+            <button id="init" data-options="options" style="z-index: 20000;"> START CHAT </button>
+    
+    <div id="test" style="position: fixed;top: 4rem;right: 8rem;width:270px ;display: none;">
+      
+        <div class="child" id="chatbot" style="width:270px ;">
+            
+            <div class="header" style="width:270px ;">
+                <div class="h-child">
+                    <div>
+                        <i style="margin-left: 10px;font-size: 20px;color:  #0a8573;" class="fa fa-commenting" aria-hidden="true"> {{ss}}</i>
+                        <span style="margin-left: 10px;" class="name"><span style="color:rgb(89, 152, 26) ;font-size:18px ;font-family: serif;margin-bottom:30px ;">Chat</span>Bot</span>
+                        <br>
+                        <span id="hello-msg" style="color:lawngreen;margin-left:20px;margin-bottom:40px;">Hello,{{request.user}}</span>
+                        <button type="text"  data-action="addlisten" id="update-chat"    style=" font-size: 15px;color:#022739;margin-left: 10px;"  >Talk to bot</button>
+
+                    </div>
+                </div>
+                <div>
+                    <button class="refBtn" style="margin-bottom:11px ;"><i class="fa fa-refresh" onclick="initChat()"></i></button>
+                </div>
+            </div>
+            <!-- <div id="chat" ><p>Talk about the brand you want</p><br><span>Wait a second </span>{% for message2 in messages %}
+                <p id="messages" style="background-color: rgb(210, 248, 235);z-index: 6000000;color: #fff;position: absolute;"  >{{message2}}</p>
+               {% endfor %}</div>  -->
+            <div data-options="options1" data-ram="ram" data-name="name" id="chat-box">
+                
+                </div>
+              
+    </div>
+    
+   </div>
+   
+    <!-- js file  -->
+    
+    <script src="{% static 'js/main.js' %}"></script>
+    <script type="text/javascript">
+        var user = '{{request.user}}'
+      
+      function getToken(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = cookies[i].trim();
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
+      }
+      var csrftoken = getToken('csrftoken')
+      
+      </script>
+        <script src="{% static 'js/chat.js' %}"></script>
+
+</body>
+
+</html>
